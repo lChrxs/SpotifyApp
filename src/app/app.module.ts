@@ -29,6 +29,7 @@ import { MinutesPipe } from './libs/pipes/minutes.pipe';
 import { TokenInterceptor } from './services/interceptors/token.interceptor';
 import { ContactComponent } from './components/contact/contact.component';
 import { AnimateDirective } from './libs/directives/animate.directive';
+import { LoginComponent } from './components/login/login.component';
 
 registerLocaleData(localeEs, 'es')
 
@@ -41,7 +42,8 @@ registerLocaleData(localeEs, 'es')
     ModalSongComponent,
     MinutesPipe,
     ContactComponent,
-    AnimateDirective
+    AnimateDirective,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

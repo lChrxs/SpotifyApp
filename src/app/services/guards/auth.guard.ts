@@ -1,27 +1,30 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SpotifyService } from '../spotify.service';
+import { AuthService } from '../auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private spotifyS: SpotifyService){ }
+  constructor(public router: Router){ }
 
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-      // if(this.spotifyS.checkSpotifyToken()){
-      //   return this.spotifyS.checkSpotifyToken();
+      let authorize = sessionStorage.getItem('auth')
 
-      // }else {
-      //   this.spotifyS.getToken();
-      //   return false;
-      // }
-      return true
+      if(authorize){
+        console.log(true)
+        return true
+        
+      }else {
+        this.router.navigate(['/login'])
+        console.log(false)
+        return false
+      }
   }
 
 }
