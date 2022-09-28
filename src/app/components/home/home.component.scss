@@ -1,0 +1,35 @@
+.like:hover {
+  background-color: midnightblue;
+  color: white;
+} 
+
+.share:hover {
+  background-color: lime;
+  color: black;
+}
+
+.listen:hover {
+  background-color: mediumvioletred;
+}
+
+mat-card {
+  background-color: #FF3CAC;
+  background-image: linear-gradient(225deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.zoom {
+  transform: scale(1);
+  transition: all .3s 0s ease-in-out;
+  z-index: 1;
+}
+
+.zoom:hover{
+  overflow: hidden;
+  transform: scale(1.2);
+  z-index: 2;
+}

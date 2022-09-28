@@ -1,0 +1,78 @@
+<!-- Contenedor principal -->
+<div class="container-fluid h-100 mt-5">
+
+  <div class="pt-8 pt-lg-8">
+    <div class="row d-flex justify-content-center align-items-center">
+      <div class="col-11 col-md-8 col-lg-4 formContacto ">
+        
+        <form [formGroup]="contactForm" (ngSubmit)="contactForm.valid && onSubmit()" class="row g-3 d-flex justify-content-center align-items-center needs-validation" novalidate #formLogin="ngForm">
+
+          <div class="text-center pt-4 pt-lg-4 text-white">
+            <h3 class="fs-2 fw-bold">Contactanos</h3>
+          </div>
+        
+
+            <div class="form-floating col-12">
+              <input type="text" class="form-control fs-5" id="nombre" name="nombre" formControlName="nombre" placeholder="Nombre" autocomplete="off" ngClass="{{contactForm.get('nombre')?.invalid && (contactForm.get('nombre')?.dirty || formLogin.submitted) ? 'is-invalid' : '' }}" required>
+              <label for="nombre" class="fs-6">Nombre</label>
+              <div class="invalid-feedback fs-6" *ngIf="contactForm.get('nombre')?.hasError('minlength') && contactForm.get('nombre')?.dirty">
+                El campo debe tener minimo 5 caracteres
+              </div>
+              <div class="invalid-feedback fs-6" *ngIf="contactForm.get('nombre')?.hasError('maxlength') && contactForm.get('nombre')?.dirty">
+                El campo debe tener maximo 40 caracteres
+              </div>
+              <div class="invalid-feedback fs-6" *ngIf="contactForm.get('nombre')?.hasError('required') && formLogin.submitted">
+                El campo es obligatorio
+              </div>
+            </div>
+
+
+
+            <div class="form-floating col-12">
+              <input type="email" class="form-control fs-5" id="email" name="email" formControlName="email" placeholder="Email" autocomplete="off" ngClass="{{contactForm.get('email')?.invalid && (contactForm.get('email')?.dirty || formLogin.submitted) ? 'is-invalid' : '' }}">
+              <label for="email" class="fs-6">Email</label>
+              <div class="invalid-feedback fs-6" *ngIf="contactForm.get('email')?.hasError('email') && contactForm.get('email')?.dirty">
+                Ingresa una direccion de correo valida
+              </div>
+              <div class="invalid-feedback fs-6" *ngIf="contactForm.get('email')?.hasError('required') && formLogin.submitted">
+                El campo es obligatorio
+              </div>
+            </div>
+
+
+            <div class="form-floating col-12">
+              <input type="text" class="form-control fs-5" id="subject" name="subject" formControlName="subject" placeholder="Asunto" autocomplete="off" ngClass="{{contactForm.get('subject')?.invalid && (contactForm.get('subject')?.dirty || formLogin.submitted) ? 'is-invalid' : '' }}">
+              <label for="subject" class="fs-6">Asunto</label>
+              <div class="invalid-feedback fs-6" *ngIf="contactForm.get('subject')?.hasError('maxlength') && contactForm.get('subject')?.dirty">
+                Maximo 30 caracteres
+              </div>
+              <div class="invalid-feedback fs-6" *ngIf="contactForm.get('subject')?.hasError('required') && formLogin.submitted">
+                El campo es obligatorio
+              </div>
+            </div>
+
+
+            <div class="form-floating col-12">
+              <textarea class="form-control fs-6 txtArea" placeholder="Mensaje" id="message" name="message" ngClass="{{contactForm.get('message')?.invalid && (contactForm.get('message')?.dirty || formLogin.submitted) ? 'is-invalid' : '' }}"></textarea>
+              <label for="message" class="fs-6">Mensaje</label>
+              <div class="invalid-feedback fs-6" *ngIf="contactForm.get('message')?.hasError('maxlength') && contactForm.get('message')?.dirty">
+                Maximo 200 caracteres
+              </div>
+              <div class="invalid-feedback fs-6" *ngIf="contactForm.get('message')?.hasError('required') && formLogin.submitted">
+                El campo es obligatorio
+              </div>
+            </div>
+
+          <div class="text-center mb-4 mb-lg-4">
+            <button type="submit" class="btn btn-success">Enviar</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- END Contenedor principal -->
+
+  

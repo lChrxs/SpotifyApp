@@ -1,0 +1,28 @@
+<div class="container-fluid mt-5">
+  <div class="row d-flex justify-content-center">
+    <div class="col-lg-10 mb-5">
+      <div class="row g-3">
+        <div class="col-12 col-md-4 col-lg-3"  *ngFor="let item of releases">
+          <mat-card class="h-100 text-white" [animate]="['zoom']">
+            <img mat-card-image [src]="item.images[0].url">
+            <mat-card-content class="mb-5">
+              <span class="fs-6">Artist: </span>
+              <ng-container *ngFor="let artist of item.artists, let isLast=last">
+                <span class="fs-6"> {{artist.name}}{{isLast ? '' : ', '}} </span>
+              </ng-container>
+              <p class="fs-6 mt-2">Nombre: {{item.name}}</p>
+              <p class="fs-6">Lanzamiento: {{item.release_date | date: 'longDate'}}</p>
+            </mat-card-content>
+            <mat-card-actions class="position-absolute bottom-0 start-0 m-2">
+              <button mat-button class="like">LIKE</button>
+              <button mat-button class="share"><a href="{{item.external_urls.spotify}}" target="_blank">SHARE</a></button>
+              <button mat-button class="listen" (click)="openModal(item.id)">Listen</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+</div>
