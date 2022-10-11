@@ -19,9 +19,6 @@ export class ContactComponent implements OnInit {
       subject: new FormControl(null, [Validators.required, Validators.maxLength(30)]),
       message: new FormControl(null, [Validators.required, Validators.maxLength(200)])
     })
-    this.contactForm.get('nombre')?.setErrors({
-      minLength: true
-    })
   }
   
   onSubmit(){
