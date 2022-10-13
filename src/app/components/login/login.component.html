@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row d-flex justify-content-center">
-    <div class="col-lg-5 mt-5">
+    <div class="col-lg-4 d-flex justify-content-center align-items-center" style="height: 100vh;">
 
       <form [formGroup]="loginForm" (ngSubmit)="loginForm.valid && onSubmit()" class="row g-3 d-flex justify-content-center align-items-center needs-validation" novalidate #formLogin="ngForm">
 
@@ -8,23 +8,25 @@
           <p class="fs-2">Login</p>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
           <label for="user" class="form-label text-white fs-5">Usuario</label>
           <input type="text" class="form-control" name="user" id="user" formControlName="user" ngClass="{{loginForm.get('user')?.invalid && (loginForm.get('user')?.dirty || formLogin.submitted) ? 'is-invalid' : '' }}">
-          <div class="invalid-feedback fs-6" *ngIf="loginForm.get('user')?.hasError('required') && formLogin.submitted">
+          <div class="invalid-feedback" *ngIf="loginForm.get('user')?.hasError('required') && formLogin.submitted">
             El campo es obligatorio
           </div>
         </div>
         
-        <div class="mb-3">
+        <div class="mb-4">
           <label for="password" class="form-label text-white fs-5">Contraseña</label>
           <input type="password" class="form-control" name="password" id="password" formControlName="password" ngClass="{{loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || formLogin.submitted) ? 'is-invalid' : '' }}">
-          <div class="invalid-feedback fs-6" *ngIf="loginForm.get('password')?.hasError('required') && formLogin.submitted">
+          <div class="invalid-feedback" *ngIf="loginForm.get('password')?.hasError('required') && formLogin.submitted">
             El campo es obligatorio
           </div>
         </div>
 
-        <div class="text-center mb-4 mb-lg-4">
+        <div class="invalid-credentials fs-5" *ngIf="login == false">Credenciales incorrectas, inténtalo nuevamente</div>
+
+        <div class="text-center my-4">
           <button type="submit" class="btn btn-lg btn-success">Enviar</button>
         </div>
 

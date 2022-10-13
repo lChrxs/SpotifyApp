@@ -1,6 +1,14 @@
+.container-fluid {
+  overflow: auto;
+  height: 100%;
+  padding-bottom: 6rem;
+}
+
 .like:hover {
-  background-color: midnightblue;
-  color: white;
+  background-color: transparent !important;
+  span{
+    background-color: transparent !important;
+  }
 } 
 
 .share:hover {

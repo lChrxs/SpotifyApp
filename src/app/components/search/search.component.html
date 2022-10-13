@@ -7,20 +7,41 @@
       </div>
 
       <div class="col-lg-12 mt-5">
-        <div class="row g-5">
+        <!-- Vista en dispositivos grandes -->
+        <div class="row g-5 d-none d-lg-flex" *ngIf="artistas$ | async as artistas">
           <div class="col-lg-4" *ngFor="let artista of artistas">
             <div class="imageText mx-auto">
-              <img [src]="artista.images[1].url" class="img-fluid d-block mx-auto filter">
+              <img *ngIf="artista.images[1].url" [src]="artista.images[1].url" class="d-block mx-auto filter">
+              <img *ngIf="!artista.images[1].url" [src]="artista.images[0].url" class="d-block mx-auto filter">
               <div class="content">
                 <div class="text h-75 w-75">
                   <p class="fs-2 my-2">{{artista.name}}</p>
-                  <p class="fs-4 mb-2">Seguirdores: {{artista.followers.total}}</p>
-                  <p class="fs-4"><a href="{{artista.external_urls.spotify}}" target="_blank">Ir a Spotify</a></p>
+                  <p class="fs-4 mb-2">Seguirdores: {{artista.followers}}</p>
+                  <p class="fs-4"><a [href]="artista.external_urls" target="_blank">Ir a Spotify</a></p>
+                  <button mat-icon-button (mouseenter)="playSong(artista.song?.song)" (mouseleave)="stopSong()"><mat-icon class="play">play_arrow</mat-icon></button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Vista en mobiles -->
+        <div class="row g-4 d-flex d-lg-none" *ngIf="artistas$ | async as artistas">
+          <div class="col-12 col-md-6" *ngFor="let artista of artistas">
+            <mat-card>
+              <img *ngIf="artista.images[1].url" mat-card-image [src]="artista.images[1].url">
+              <img *ngIf="!artista.images[1].url" mat-card-image [src]="artista.images[0].url">
+              <mat-card-content class="mb-5">
+                <span class="fs-5">Artist: {{artista.name}}</span>
+                <p class="fs-5 mt-2">Seguirdores: {{artista.followers}}</p>
+              </mat-card-content>
+              <mat-card-actions class="text-center mb-2">
+                <button mat-button class="share"><a [href]="artista.external_urls" target="_blank">Ir a Spotify</a></button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+
       </div>
 
     </div>

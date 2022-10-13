@@ -29,7 +29,6 @@ export class ModalSongComponent implements OnInit {
 
     this.spotifyS.getAlbum(this.data).subscribe({
       next: (res) => {
-        console.log(res)
         this.album = res;
         this.dataSource = new MatTableDataSource(this.album.tracks.items);
         this.dataSource.sort = this.sort;

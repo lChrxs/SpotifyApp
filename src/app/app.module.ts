@@ -7,29 +7,24 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
+import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { SearchComponent } from './components/search/search.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { ModalSongComponent } from './components/modal-song/modal-song.component';
 
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ModalSongComponent } from './components/modal-song/modal-song.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 import localeEs from '@angular/common/locales/es-MX';
 import { registerLocaleData } from '@angular/common';
+
 import { MinutesPipe } from './libs/pipes/minutes.pipe';
-import { TokenInterceptor } from './services/interceptors/token.interceptor';
-import { ContactComponent } from './components/contact/contact.component';
 import { AnimateDirective } from './libs/directives/animate.directive';
-import { LoginComponent } from './components/login/login.component';
+import { TokenInterceptor } from './services/interceptors/token.interceptor';
+import { MaterialModule } from './shared/material.module';
 
 registerLocaleData(localeEs, 'es')
 
@@ -54,14 +49,8 @@ registerLocaleData(localeEs, 'es')
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    MatCardModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatIconModule,
-    MatTableModule,
-    MatSortModule,
-    MatFormFieldModule,
-    MatInputModule
+    MaterialModule,
+    SweetAlert2Module.forRoot()
   ],
   providers: [
     { // * Esta declaracion es para poder mostrar las fechas en español con datePipe

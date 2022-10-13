@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from '../../services/spotify.service';
+import { Observable, tap } from 'rxjs';
+import { Artists } from 'src/app/libs/interfaces/artists.interface';
 
 @Component({
   selector: 'app-search',
@@ -8,7 +10,8 @@ import { SpotifyService } from '../../services/spotify.service';
 })
 export class SearchComponent implements OnInit {
 
-  artistas: any[]= []
+  artistas$!: Observable<Artists[]>
+  audio = new Audio()
 
   constructor(public spotifyS: SpotifyService) { }
 
@@ -16,16 +19,21 @@ export class SearchComponent implements OnInit {
   }
 
   findArtist(value: string){
-    this.spotifyS.getArtistas(value).subscribe({
-      next: (res: any) => {
-        this.artistas = res
-        console.log(this.artistas)
-      },
-      error: (err) => {
-        console.error(err)
-      },
-      complete: () => console.info('Peticion completa')
-    })
+    if(value.length > 0){
+
+      this.artistas$ = this.spotifyS.getArtistas(value)
+    }
+  }
+
+  playSong(song: any){
+    
+    this.audio.src = song
+    this.audio.load()
+    this.audio.play()
+  }
+
+  stopSong(){
+    this.audio.pause()
   }
 
 }

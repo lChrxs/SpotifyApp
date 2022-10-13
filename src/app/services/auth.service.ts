@@ -1,27 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import StorageHelper from '../libs/helpers/storage.helper';
+import { Observable } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  public auth: boolean = false;
-  public user: string = 'Chris111';
-  public password: string = '123456';
+  private user: string = 'Chris111';
+  private password: string = '123456';
 
-  constructor(public router: Router) { }
+  constructor() { }
 
-  login(user: string, password: string){
-    if(this.user === user && this.password === password){
-      this.auth = true;
-      sessionStorage.setItem('auth', this.auth.toString())
-      console.log('Simon')
-      this.router.navigate(['home'])
-    }else {
-      window.location.reload()
-      console.log('Nel')
-    }
+  login(loginForm: any): Observable<any>{
+
+    return new Observable<boolean>(observer => {
+      if(this.user === loginForm.user && this.password === loginForm.password){
+        StorageHelper.setItem('auth', 'true')
+        observer.next(true)
+      }else {
+        observer.next(false)
+        throw new Error('Credenciales incorrectas')
+      }
+    })
+
+
+
+
+    
    
   }
 }

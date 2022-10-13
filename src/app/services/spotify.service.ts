@@ -1,119 +1,152 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { map, Observable, concatMap, tap, concat, merge, combineLatestAll, combineLatest } from 'rxjs';
+import { Constants } from '../utils/constants.class';
+import { environment } from '../../environments/environment.prod';
+import { ApiEndpoints } from '../utils/apiendpoints.class';
+import StorageHelper from '../libs/helpers/storage.helper';
+import Transform from '../libs/helpers/transform.helper';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpotifyService{
 
-  credentials = {
-    clientId: "106b1801ba274e508294fd2b62cc4eed",
-    clientSecret: "7190ba99145d40c297eef33cd2737d08",
-    accessToken: ""
-  }
-
-  tokenUrl = 'https://accounts.spotify.com/api/token'
-  spotifyUrl = 'https://api.spotify.com/v1/'
+  private artistUrls: Observable<any>[] = []
 
   constructor(
-    private http: HttpClient,
-    public router: Router  
-  ) { 
-    this.updateToken();
+    private http: HttpClient 
+  ) { }
+
+
+  getToken(): Observable<any>{
+    //Preparamos el body con los parámetros que se necesitan para pedir un nuevo token
+    const body = new HttpParams()
+    .set('grant_type', 'client_credentials')
+    .set('client_id', Constants.CLIENT_ID)
+    .set('client_secret', Constants.CLIENT_SECRET)
+
+    return this.http.post(environment.TOKEN_URL, body.toString(), {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    })
   }
 
-  updateToken(): void{
-    this.credentials.accessToken = sessionStorage.getItem('token') ?? ''
-  }
+
 
 /**
- * It gets the access token from the Spotify API and stores it in the sessionStorage with the key token, then navigates to home
+ * It checks if the token is stored in the session storage
+ * @returns True if token exist, false if token doesn't exist
  */
-  getToken(): void{
-    const body = new HttpParams()
-      .set('grant_type', 'client_credentials')
-      .set('client_id', this.credentials.clientId)
-      .set('client_secret', this.credentials.clientSecret);
-
-    this.http.post(this.tokenUrl, body.toString(), {
-      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-    }).subscribe({
-        next: (res: any) => {
-          sessionStorage.setItem('token', res.access_token)
-        },
-        error: (err) => {
-          console.error(err)
-        },
-        complete: () => console.info('Peticion completa')
-      })
+  checkSpotifyToken(): boolean{
+    let check = StorageHelper.getItem('token') ? true : false
+    return check
   }
-
-  adaptador(url: string){
-    if(url.includes('browse/new-releases')){
-      this.getNewReleases()
-    }else if(url.includes('search?q=')){
-      let link = new URL(url)
-      let params = new URLSearchParams(link.search);
-      let nombre = params.get('q')
-      this.getArtistas(nombre!)
-    }
-  }
-
-  // !No se esta usando, se puede usar en el Guard
-  // checkSpotifyToken(): boolean{
-  //   let check = (sessionStorage.getItem('token')) ? true : false
-  //   console.log('Auth: ' + check)
-  //   return check
-  // }
 
   
+
 /**
  * We're using the HttpClient to make a GET request to the Spotify API, and then we're using the map
  * operator to return the albums.items property from the response
- * @returns The new releases from the Spotify API
+ * @returns An observable of an array of albums.
  */
-  getNewReleases(): Observable<any>{
-    // const headers = new HttpHeaders({
-    //   'Authorization': `Bearer ${this.credentials.accessToken}` 
-    // })
-    return this.http.get(this.spotifyUrl + 'browse/new-releases').pipe(
+  getNewReleases(offset: number): Observable<any>{
+
+    return this.http.get(environment.SPOTIFY_URL + ApiEndpoints.getNewReleases(offset)).pipe(
       map((res: any) => {
-        return res.albums.items
+        return Transform.releases(res.albums.items)
       })
     )
   }
 
+
 /**
- * We're using the HttpClient to make a GET request to the Spotify API, and we're passing in the id of
- * the album we want to get
- * @param {any} id - The Spotify ID for the album.
- * @returns An observable of the album with the id that was passed in.
+ * This function takes an id as a parameter and returns an observable of type any
+ * @param {any} id - The id of the album.
+ * @returns Observable<any>
  */
   getAlbum(id: any): Observable<any>{
-    // const headers = new HttpHeaders({
-    //   'Authorization': `Bearer ${this.credentials.accessToken}` 
-    // })
-    return this.http.get(this.spotifyUrl + `albums/${id}`)
+    return this.http.get(environment.SPOTIFY_URL + ApiEndpoints.getAlbum(id))
   }
 
 
+
 /**
- * We're using the HttpClient to make a GET request to the Spotify API, and then we're using the RxJS
- * map operator to return the artists.items property from the response
- * @param {string} value - string - The value of the search input.
+ * We're using the HttpClient to make a GET request to the Spotify API, and then we're using the map
+ * operator to return the artists.items property from the response
+ * @param {string} value - string - The value that the user types in the search bar.
  * @returns An observable of an array of artists.
  */
   getArtistas(value: string): Observable<any>{
-    return this.http.get(this.spotifyUrl + `search?q=${value}&type=artist&limit=20`).pipe(
+    return this.http.get(environment.SPOTIFY_URL + ApiEndpoints.getArtist(value)).pipe(
       map((res: any) => {
-        return res.artists.items
+        let transformRes = Transform.artists(res.artists.items)
+        transformRes.forEach(artist => {
+          this.artistUrls.push(this.http.get(environment.SPOTIFY_URL + ApiEndpoints.getArtistSong(artist.id)))
+        })
+        return transformRes
+      }),
+      concatMap((transformRes: any) => {
+        
+        return this.getArtistSongs(transformRes)
       })
+      
     )
   }
 
+  
+  getArtistSongs(transformRes: any): Observable<any>{
+    return merge(this.artistUrls).pipe(
+      combineLatestAll(),
+      map((res: any) => {
+        
+        let songs = res.map((item: any) => {
+          return {
+            album: item.tracks[0].name,
+            song: item.tracks[0].preview_url
+          }
+        })
+
+        let i = 0
+
+        let newRes = transformRes
+        newRes.forEach((artist: any) => {
+          
+          if(i < songs.length){
+            artist.song = songs[i]
+            i++
+          }
+          
+        });
+        
+        return newRes
+        
+      })
+      )
+    }
+    
+    addLikedRelease(id: number){
+      let list = JSON.parse(localStorage.getItem(Constants.MY_LIKED_RELEASES) ?? '[]')
+      if(list.indexOf(id) == -1){
+        list.push(id)
+        localStorage.setItem(Constants.MY_LIKED_RELEASES, JSON.stringify(list))
+      }
+    }
+  
+    removeLikedRelease(id: number){
+      let list = JSON.parse(localStorage.getItem(Constants.MY_LIKED_RELEASES) ?? '[]')
+      let index = list.indexOf(id)
+      if(index > -1){
+        list.splice(index, 1)
+        localStorage.setItem(Constants.MY_LIKED_RELEASES, JSON.stringify(list))
+      }
+    }
+  
+  
+    checkLikedRelease(id: number): boolean {
+      let list = JSON.parse(localStorage.getItem(Constants.MY_LIKED_RELEASES) ?? '[]')
+      return (list.indexOf(id) > -1)
+    }
 
 
-
-}
+  }
+  

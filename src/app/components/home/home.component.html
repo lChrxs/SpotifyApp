@@ -1,22 +1,22 @@
-<div class="container-fluid mt-5">
+<div class="container-fluid pt-5 mt-2" (scroll)="onScroll($event)">
   <div class="row d-flex justify-content-center">
-    <div class="col-lg-10 mb-5">
-      <div class="row g-3">
-        <div class="col-12 col-md-4 col-lg-3"  *ngFor="let item of releases">
+    <div class="col-11 col-md-11 col-lg-10 mb-5">
+      <div class="row g-3" *ngIf="originalReleases">
+        <div class="col-12 col-md-4 col-lg-3"  *ngFor="let album of originalReleases">
           <mat-card class="h-100 text-white" [animate]="['zoom']">
-            <img mat-card-image [src]="item.images[0].url">
+            <img mat-card-image [src]="album.images[0].url">
             <mat-card-content class="mb-5">
               <span class="fs-6">Artist: </span>
-              <ng-container *ngFor="let artist of item.artists, let isLast=last">
-                <span class="fs-6"> {{artist.name}}{{isLast ? '' : ', '}} </span>
+              <ng-container *ngFor="let artist of album.artists, let isLast=last">
+                <span class="fs-6"> {{artist}}{{isLast ? '' : ', '}} </span>
               </ng-container>
-              <p class="fs-6 mt-2">Nombre: {{item.name}}</p>
-              <p class="fs-6">Lanzamiento: {{item.release_date | date: 'longDate'}}</p>
+              <p class="fs-6 mt-2">Nombre: {{album.name}}</p>
+              <p class="fs-6">Lanzamiento: {{album.release_date | date: 'longDate'}}</p>
             </mat-card-content>
-            <mat-card-actions class="position-absolute bottom-0 start-0 m-2">
-              <button mat-button class="like">LIKE</button>
-              <button mat-button class="share"><a href="{{item.external_urls.spotify}}" target="_blank">SHARE</a></button>
-              <button mat-button class="listen" (click)="openModal(item.id)">Listen</button>
+            <mat-card-actions class="position-absolute bottom-0 mx-auto mb-2">
+              <button mat-button class="like mx-md-0" (click)="toggleLiked(album.id)"><mat-icon [ngStyle]="{'color': spotifyS.checkLikedRelease(album.id) ? 'red' : 'white'}">favorite</mat-icon></button>
+              <button mat-button class="share mx-md-0"><a href="{{album.external_urls}}" target="_blank">SHARE</a></button>
+              <button mat-button class="listen mx-md-0" (click)="openModal(album.id)">Listen</button>
             </mat-card-actions>
           </mat-card>
         </div>

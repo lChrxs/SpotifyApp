@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import StorageHelper from '../../libs/helpers/storage.helper';
 
 @Component({
   selector: 'app-contact',
@@ -10,7 +12,7 @@ export class ContactComponent implements OnInit {
 
   public contactForm!: FormGroup
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     this.contactForm = new FormGroup({
@@ -26,5 +28,11 @@ export class ContactComponent implements OnInit {
     console.log(this.contactForm.value)
     
   }
+
+  saveForm(){
+    StorageHelper.setItem('contact', JSON.stringify(this.contactForm.value))
+    this.router.navigate(['/home'])
+  }
+
 
 }

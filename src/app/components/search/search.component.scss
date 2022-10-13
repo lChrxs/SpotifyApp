@@ -1,3 +1,8 @@
+.container-fluid {
+  overflow: auto;
+  height: 100%;
+}
+
 .search {
   width: 100%;
   background-color: transparent;
@@ -46,6 +51,25 @@
 }
 
 
-a {
+p a {
   color: white;
+}
+
+.filter {
+  max-width: 320px;
+  max-height: 320px;
+}
+
+button a {
+  text-decoration: none;
+  color: black;
+}
+
+.share {
+  background-color: lime;
+  color: black;
+}
+
+.play {
+  transform: scale(1.6);
 }
