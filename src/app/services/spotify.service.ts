@@ -80,6 +80,7 @@ export class SpotifyService{
     return this.http.get(environment.SPOTIFY_URL + ApiEndpoints.getArtist(value)).pipe(
       map((res: any) => {
         let transformRes = Transform.artists(res.artists.items)
+        this.artistUrls = []
         transformRes.forEach(artist => {
           this.artistUrls.push(this.http.get(environment.SPOTIFY_URL + ApiEndpoints.getArtistSong(artist.id)))
         })

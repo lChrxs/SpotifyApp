@@ -3,6 +3,11 @@ import { Image, Releases } from "../interfaces/releases.interface";
 
 export default class Transform {
 
+  /**
+   * It takes an array of albums, and returns an array of Releases with the mapped properties
+   * @param {any[]} albums - array of albums
+   * @returns An array of Releases that have been mapped to the Releases interface
+   */
   public static releases(albums: any[]): Releases[]{
     let mappedAlbums = albums.map(album => {
 
@@ -38,6 +43,11 @@ export default class Transform {
   }
 
   
+/**
+ * It takes an array of artists, maps over them, and returns a new array of Artists with the mapped properties
+ * @param {any[]} artists - artists array
+ * @returns An array of objects that have been mapped to the Artists interface.
+ */
   public static artists(artists: any[]): Artists[]{
     let mappedArtists = artists.map(artist => {
       let images: Image[] = []
