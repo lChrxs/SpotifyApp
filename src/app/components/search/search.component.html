@@ -13,7 +13,7 @@
             <div class="imageText mx-auto">
               <img *ngIf="artista.images[1]?.url" [src]="artista.images[1].url" class="d-block mx-auto filter">
               <img *ngIf="!artista.images[1]?.url && artista.images[0]?.url" [src]="artista.images[0].url" class="d-block mx-auto filter">
-              <img *ngIf="!artista.images[1]?.url && !artista.images[0]?.url" mat-card-image src="../../../assets/images/ace.jpg" class="d-block mx-auto filter">
+              <img *ngIf="!artista.images[1]?.url && !artista.images[0]?.url" mat-card-image src="./assets/images/ace.jpg" class="d-block mx-auto filter">
               <div class="content">
                 <div class="text h-75 w-75">
                   <p class="fs-2 my-2">{{artista.name}}</p>
@@ -32,7 +32,7 @@
             <mat-card>
               <img *ngIf="artista.images[1]?.url" mat-card-image [src]="artista.images[1].url">
               <img *ngIf="!artista.images[1]?.url && artista.images[0]?.url" mat-card-image [src]="artista.images[0].url">
-              <img *ngIf="!artista.images[1]?.url && !artista.images[0]?.url" mat-card-image src="../../../assets/images/ace.jpg">
+              <img *ngIf="!artista.images[1]?.url && !artista.images[0]?.url" mat-card-image src="./assets/images/ace.jpg">
               <mat-card-content class="mb-5">
                 <span class="fs-5">Artist: {{artista.name}}</span>
                 <p class="fs-5 mt-2">Seguirdores: {{artista.followers}}</p>

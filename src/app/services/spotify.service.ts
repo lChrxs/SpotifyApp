@@ -107,7 +107,6 @@ export class SpotifyService{
         })
 
         let i = 0
-
         let newRes = transformRes
         newRes.forEach((artist: any) => {
           
@@ -122,30 +121,30 @@ export class SpotifyService{
         
       })
       )
-    }
+  }
     
-    addLikedRelease(id: number){
-      let list = JSON.parse(localStorage.getItem(Constants.MY_LIKED_RELEASES) ?? '[]')
-      if(list.indexOf(id) == -1){
-        list.push(id)
-        localStorage.setItem(Constants.MY_LIKED_RELEASES, JSON.stringify(list))
-      }
+  addLikedRelease(id: number){
+    let list = JSON.parse(localStorage.getItem(Constants.MY_LIKED_RELEASES) ?? '[]')
+    if(list.indexOf(id) == -1){
+      list.push(id)
+      localStorage.setItem(Constants.MY_LIKED_RELEASES, JSON.stringify(list))
     }
-  
-    removeLikedRelease(id: number){
-      let list = JSON.parse(localStorage.getItem(Constants.MY_LIKED_RELEASES) ?? '[]')
-      let index = list.indexOf(id)
-      if(index > -1){
-        list.splice(index, 1)
-        localStorage.setItem(Constants.MY_LIKED_RELEASES, JSON.stringify(list))
-      }
+  }
+
+  removeLikedRelease(id: number){
+    let list = JSON.parse(localStorage.getItem(Constants.MY_LIKED_RELEASES) ?? '[]')
+    let index = list.indexOf(id)
+    if(index > -1){
+      list.splice(index, 1)
+      localStorage.setItem(Constants.MY_LIKED_RELEASES, JSON.stringify(list))
     }
-  
-  
-    checkLikedRelease(id: number): boolean {
-      let list = JSON.parse(localStorage.getItem(Constants.MY_LIKED_RELEASES) ?? '[]')
-      return (list.indexOf(id) > -1)
-    }
+  }
+
+
+  checkLikedRelease(id: number): boolean {
+    let list = JSON.parse(localStorage.getItem(Constants.MY_LIKED_RELEASES) ?? '[]')
+    return (list.indexOf(id) > -1)
+  }
 
 
   }
