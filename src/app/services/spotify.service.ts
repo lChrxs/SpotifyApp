@@ -101,8 +101,8 @@ export class SpotifyService{
         
         let songs = res.map((item: any) => {
           return {
-            album: item.tracks[0].name,
-            song: item.tracks[0].preview_url
+            album: item.tracks[0]?.name,
+            song: item.tracks[0]?.preview_url
           }
         })
 

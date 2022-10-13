@@ -14,6 +14,6 @@ export interface Image {
 }
 
 export interface Song {
-  album:      string;
+  album?:      string;
   song?:      string
 }
