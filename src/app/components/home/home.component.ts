@@ -4,6 +4,7 @@ import { SpotifyService } from '../../services/spotify.service';
 import { ModalSongComponent } from '../modal-song/modal-song.component';
 import { concatMap, Observable, tap, concat, merge, reduce, mergeMap } from 'rxjs';
 import { Releases } from '../../libs/interfaces/releases.interface';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-home',
@@ -60,6 +61,8 @@ export class HomeComponent implements OnInit {
 
         this.albumsLoaded += 25
         this.getNewReleases()
+
+        // ?Puede ser con BehaviorSubject
 
         // this.nextReleases$ = this.spotifyS.getNewReleases(this.albumsLoaded)
 

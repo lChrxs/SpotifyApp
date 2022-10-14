@@ -23,6 +23,7 @@ export class AuthGuard implements CanActivate {
       }else if(state.url.includes('login') && !authorize){
         return true
       }
+      
 
       if(authorize){
         return true

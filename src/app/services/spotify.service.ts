@@ -6,6 +6,8 @@ import { environment } from '../../environments/environment.prod';
 import { ApiEndpoints } from '../utils/apiendpoints.class';
 import StorageHelper from '../libs/helpers/storage.helper';
 import Transform from '../libs/helpers/transform.helper';
+import { Artists } from '../libs/interfaces/artists.interface';
+import { Releases } from '../libs/interfaces/releases.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -49,7 +51,7 @@ export class SpotifyService{
  * operator to return the albums.items property from the response
  * @returns An observable of an array of albums.
  */
-  getNewReleases(offset: number): Observable<any>{
+  getNewReleases(offset: number): Observable<Releases[]>{
 
     return this.http.get(environment.SPOTIFY_URL + ApiEndpoints.getNewReleases(offset)).pipe(
       map((res: any) => {
@@ -60,9 +62,9 @@ export class SpotifyService{
 
 
 /**
- * This function takes an id as a parameter and returns an observable of type any
+ * This function takes an id as a parameter and returns the response from the Api
  * @param {any} id - The id of the album.
- * @returns Observable<any>
+ * @returns Album from the Api response
  */
   getAlbum(id: any): Observable<any>{
     return this.http.get(environment.SPOTIFY_URL + ApiEndpoints.getAlbum(id))
@@ -70,17 +72,13 @@ export class SpotifyService{
 
 
 
-/**
- * We're using the HttpClient to make a GET request to the Spotify API, and then we're using the map
- * operator to return the artists.items property from the response
- * @param {string} value - string - The value that the user types in the search bar.
- * @returns An observable of an array of artists.
- */
-  getArtistas(value: string): Observable<any>{
+
+  getArtistas(value: string): Observable<Artists[]>{
     return this.http.get(environment.SPOTIFY_URL + ApiEndpoints.getArtist(value)).pipe(
       map((res: any) => {
         let transformRes = Transform.artists(res.artists.items)
         this.artistUrls = []
+        
         transformRes.forEach(artist => {
           this.artistUrls.push(this.http.get(environment.SPOTIFY_URL + ApiEndpoints.getArtistSong(artist.id)))
         })
@@ -95,7 +93,7 @@ export class SpotifyService{
   }
 
   
-  getArtistSongs(transformRes: any): Observable<any>{
+  getArtistSongs(transformRes: any): Observable<Artists[]>{
     return merge(this.artistUrls).pipe(
       combineLatestAll(),
       map((res: any) => {

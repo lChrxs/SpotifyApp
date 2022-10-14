@@ -24,6 +24,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
 
+    // Usar un servicio intermedio con BehaviorSubject para mostrar o ocultar el header
+
     this.loginForm = new FormGroup({
       user: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required)
@@ -44,9 +46,11 @@ export class LoginComponent implements OnInit {
             }),
             complete: () => {
               this.router.navigate(['/home'])
-
             }
           })
+
+        }else {
+          this.loginForm.reset()
         }
         
       })

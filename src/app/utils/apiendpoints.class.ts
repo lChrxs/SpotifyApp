@@ -11,14 +11,29 @@ export class ApiEndpoints {
     return `browse/new-releases?country=MX&limit=25&offset=${offset}`
   }
 
+/**
+ * It takes the album id and return the endpoint string with the album id
+ * @param {any} id - any
+ * @returns Api endpoint for album
+ */
   static getAlbum(id: any){
     return `albums/${id}`
   }
 
-  static getArtist(value: string){
-    return `search?q=${value}&type=artist&limit=20`
+/**
+ * It takes the artist the user types and return the endpoint to search the artist the user is looking for
+ * @param {string} artist - the artist value of the search input
+ * @returns Api endpoint for search artist
+ */
+  static getArtist(artist: string){
+    return `search?q=${artist}&type=artist&limit=20`
   }
 
+/**
+ * It takes the artist id and return the endpoint to search the artist top tracks in Mexico
+ * @param {any} id - The id of the artist
+ * @returns Api endpoint for artist top tracks in Mexico
+ */
   static getArtistSong(id: any){
     return `artists/${id}/top-tracks?market=MX`
   }

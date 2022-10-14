@@ -11,7 +11,7 @@ import { MatSort } from '@angular/material/sort';
 })
 export class ModalSongComponent implements OnInit {
 
-  @ViewChild(MatSort, {static: false}) sort!: MatSort;
+  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('prevSong') prevSong?: ElementRef
 
   displayedColumns: string[] = ['track_number', 'name', 'duration_ms', 'preview_url'];
